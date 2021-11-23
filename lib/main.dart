@@ -10,8 +10,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme:
-          ThemeData(brightness: Brightness.dark, primaryColor: Colors.purple),
+      theme: ThemeData(
+          brightness: Brightness.dark,
+          primaryColor: Colors.purple,
+          accentColor: Colors.teal[700],
+          textTheme: TextTheme(
+              bodyText2: TextStyle(fontSize: 20, fontStyle: FontStyle.italic))),
       home: Scaffold(
         appBar: AppBar(
           title: Text('Basic layout App'),
@@ -25,6 +29,11 @@ class MyApp extends StatelessWidget {
             print("Button pressed");
           },
         ),
+        persistentFooterButtons: <Widget>[
+          IconButton(onPressed: () {}, icon: Icon(Icons.add_comment)),
+          IconButton(onPressed: () {}, icon: Icon(Icons.add_alarm)),
+          IconButton(onPressed: () {}, icon: Icon(Icons.add_location)),
+        ],
       ),
     );
   }
