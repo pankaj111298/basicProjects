@@ -126,6 +126,7 @@ class AreaTextField extends StatelessWidget {
         margin: EdgeInsets.all(15),
         child: TextField(
           controller: controller,
+          keyboardType: TextInputType.number,
           decoration: InputDecoration(
               hintText: hint,
               prefixIcon: (this.hint == 'Width')
