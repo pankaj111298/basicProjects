@@ -39,7 +39,7 @@ class _areaCalculatorFormState extends State<areaCalculatorForm> {
   String? currentShape;
   final heightContoller = TextEditingController();
   final widthController = TextEditingController();
-  List<String> shapes = ['Traingle', 'Rectangle'];
+  List<String> shapes = ['Triangle', 'Rectangle'];
 
   @override
   void initState() {
@@ -69,21 +69,11 @@ class _areaCalculatorFormState extends State<areaCalculatorForm> {
               });
             },
           ),
-          TextField(
-            controller: heightContoller,
-            decoration: InputDecoration(
-                border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10))),
-                hintText: "Enter height"),
-          ),
-          TextField(
-            controller: widthController,
-            decoration: InputDecoration(
-                border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10))),
-                hintText: "Enter base"),
-          ),
-          ElevatedButton(onPressed: () {}, child: Text("Area"))
+          AreaTextField(widthController, "Width"),
+          AreaTextField(heightContoller, "Height"),
+          ElevatedButton(
+              onPressed: calculateArea, child: Text("Calculate Area")),
+          Text(result)
         ],
       ),
     );
@@ -108,6 +98,18 @@ class _areaCalculatorFormState extends State<areaCalculatorForm> {
       }
     });
   }
+
+  void calculateArea() {
+    late double area;
+    if (currentShape == 'Rectangle') {
+      area = height * width;
+    } else if (currentShape == 'Triangle') {
+      area = (height * width) / 2;
+    }
+    setState(() {
+      result = 'The area is :' + area.toString();
+    });
+  }
 }
 
 class AreaTextField extends StatelessWidget {
@@ -123,8 +125,11 @@ class AreaTextField extends StatelessWidget {
           controller: controller,
           decoration: InputDecoration(
               hintText: hint,
-              border:
-                  OutlineInputBorder(borderRadius: BorderRadius.horizontal())),
+              prefixIcon: (this.hint == 'Width')
+                  ? Icon(Icons.border_bottom_sharp)
+                  : Icon(Icons.border_left_sharp),
+              border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0))),
         ));
   }
 }
