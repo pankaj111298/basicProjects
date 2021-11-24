@@ -55,29 +55,31 @@ class _areaCalculatorFormState extends State<areaCalculatorForm> {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.all(15),
-      child: Column(
-        children: <Widget>[
-          DropdownButton<String>(
-            value: currentShape,
-            isExpanded: true,
-            items: shapes.map((value) {
-              return DropdownMenuItem<String>(
-                  child: new Text(value), value: value);
-            }).toList(),
-            onChanged: (shape) {
-              setState(() {
-                currentShape = shape!;
-              });
-            },
-          ),
-          //shape
-          ShapeContainer(currentShape),
-          AreaTextField(widthController, "Width"),
-          AreaTextField(heightContoller, "Height"),
-          ElevatedButton(
-              onPressed: calculateArea, child: Text("Calculate Area")),
-          Text(result)
-        ],
+      child: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            DropdownButton<String>(
+              value: currentShape,
+              isExpanded: true,
+              items: shapes.map((value) {
+                return DropdownMenuItem<String>(
+                    child: new Text(value), value: value);
+              }).toList(),
+              onChanged: (shape) {
+                setState(() {
+                  currentShape = shape!;
+                });
+              },
+            ),
+            //shape
+            ShapeContainer(currentShape),
+            AreaTextField(widthController, "Width"),
+            AreaTextField(heightContoller, "Height"),
+            ElevatedButton(
+                onPressed: calculateArea, child: Text("Calculate Area")),
+            Text(result)
+          ],
+        ),
       ),
     );
   }
