@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:math';
 
 void main() {
   runApp(CalculatorApp());
@@ -37,10 +38,11 @@ class _areaCalculatorFormState extends State<areaCalculatorForm> {
   late String result;
   double width = 0;
   double height = 0;
+  bool additionalField = true;
   late String currentShape;
   final heightContoller = TextEditingController();
   final widthController = TextEditingController();
-  List<String> shapes = ['Triangle', 'Rectangle'];
+  List<String> shapes = ['Triangle', 'Rectangle', 'Circle', 'Square'];
 
   @override
   void initState() {
@@ -68,13 +70,21 @@ class _areaCalculatorFormState extends State<areaCalculatorForm> {
               onChanged: (shape) {
                 setState(() {
                   currentShape = shape!;
+                  if (shape == 'Circle' || shape == 'Square') {
+                    additionalField = false;
+                  } else {
+                    additionalField = true;
+                  }
                 });
               },
             ),
             //shape
             ShapeContainer(currentShape),
-            AreaTextField(widthController, "Width"),
-            AreaTextField(heightContoller, "Height"),
+            AreaTextField(
+                widthController, currentShape == 'Circle' ? 'Radius' : 'Width'),
+            Visibility(
+                visible: additionalField,
+                child: AreaTextField(heightContoller, "Height")),
             ElevatedButton(
                 onPressed: calculateArea, child: Text("Calculate Area")),
             Text(result)
@@ -110,9 +120,13 @@ class _areaCalculatorFormState extends State<areaCalculatorForm> {
       area = height * width;
     } else if (currentShape == 'Triangle') {
       area = (height * width) / 2;
+    } else if (currentShape == 'Square') {
+      area = width * width;
+    } else if (currentShape == 'Circle') {
+      area = pi * width * width;
     }
     setState(() {
-      result = 'The area is :' + area.toString();
+      result = 'The area is :' + area.toStringAsFixed(2);
     });
   }
 }
@@ -156,8 +170,48 @@ class ShapeContainer extends StatelessWidget {
         size: Size(50, 50),
         painter: RectanglePainter(),
       );
+    } else if (shape == 'Circle') {
+      return CustomPaint(
+        size: Size(50, 50),
+        painter: CirclePainter(),
+      );
+    } else if (shape == 'Square') {
+      return CustomPaint(
+        size: Size(50, 50),
+        painter: SquarePainter(),
+      );
     }
     return Container();
+  }
+}
+
+class SquarePainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint();
+    paint.color = Colors.deepOrange;
+    Rect rect = Rect.fromCenter(
+        center: Offset(size.width / 2, size.height / 2), width: 40, height: 40);
+    canvas.drawRect(rect, paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return true;
+  }
+}
+
+class CirclePainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint();
+    paint.color = Colors.lightBlueAccent;
+    canvas.drawCircle(Offset(size.width / 2, size.height / 2), 25, paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return true;
   }
 }
 
