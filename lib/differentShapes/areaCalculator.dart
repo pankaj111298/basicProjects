@@ -1,3 +1,5 @@
+// ignore_for_file: camel_case_types
+
 import 'package:flutter/material.dart';
 import 'dart:math';
 
@@ -253,10 +255,6 @@ class TrianglePainter extends CustomPainter {
     */
     canvas.drawPath(path, paint);
   }
-
-  /**
-   * shouldRepaint is used whether the shape is triggered do we need to same painter to paint the shape
-   */
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) {
     return true;
