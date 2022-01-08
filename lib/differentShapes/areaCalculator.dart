@@ -221,7 +221,7 @@ class RectanglePainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint();
-    paint.color = Colors.lime.shade100;
+    paint.color = Colors.lime.shade600;
     Rect rect =
         Rect.fromLTRB(0, size.height / 4, size.width, size.height / 4 * 3);
     /**Canvas will draw the shape on the application 
@@ -255,6 +255,7 @@ class TrianglePainter extends CustomPainter {
     */
     canvas.drawPath(path, paint);
   }
+
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) {
     return true;
