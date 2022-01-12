@@ -1,95 +1,101 @@
+// ignore_for_file: import_of_legacy_library_into_null_safe
+
 import 'package:flutter/material.dart';
+import 'package:hello_layouts/productivityApp/TimerModel.dart';
+import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:scoped_model/scoped_model.dart';
 
 void main() {
   runApp(ProductivityApp());
 }
 
-class ProductivityApp extends StatefulWidget {
+class ProductivityApp extends StatelessWidget {
   const ProductivityApp({Key? key}) : super(key: key);
 
   @override
-  State<ProductivityApp> createState() => _ProductivityAppState();
-}
-
-class _ProductivityAppState extends State<ProductivityApp> {
-  @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: "ProductivityApp",
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text("Productivity Timer"),
-          backgroundColor: Colors.deepOrangeAccent,
-        ),
-        body: Column(
-          children: [
-            TopRow(),
-            Container(
-              decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(width: 10, color: Colors.green)),
-              child: Padding(
-                padding: const EdgeInsets.all(40.0),
-                child: Text(DateTime.now().minute.toString()),
-              ),
-            ),
-            ElevatedButton(
-              onPressed: () {},
-              child: Text("Stop"),
-              style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.symmetric(horizontal: 80, vertical: 10),
-                  primary: Colors.deepOrangeAccent.shade400),
-            ),
-            ElevatedButton(
-              onPressed: () {},
-              child: Text("Restart"),
-              style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.symmetric(horizontal: 80, vertical: 10),
-                  primary: Colors.green),
-            ),
-          ],
+    return ScopedModel(
+      model: TimerModel(),
+      child: MaterialApp(
+        title: 'Productivity Timer',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(bottomAppBarColor: Colors.red),
+        home: MainPage(
+          title: "Productivity Timer",
         ),
       ),
     );
   }
 }
 
-class TopRow extends StatefulWidget {
-  const TopRow({Key? key}) : super(key: key);
+class MainPage extends StatefulWidget {
+  const MainPage({Key? key, required this.title}) : super(key: key);
+  final String title;
 
   @override
-  _TopRowState createState() => _TopRowState();
+  State<MainPage> createState() => _MainPageState();
 }
 
-class _TopRowState extends State<TopRow> {
+class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          ElevatedButton(
-            onPressed: () {},
-            child: Text("Work"),
-            style: ElevatedButton.styleFrom(
-                padding: EdgeInsets.symmetric(horizontal: 40, vertical: 10),
-                primary: Colors.deepOrangeAccent.shade400),
+    final size = MediaQuery.of(context).size.width;
+    return ScopedModel(
+      model: TimerModel(),
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(widget.title),
+        ),
+        body: Center(
+          child: Column(
+            children: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  ScopedModelDescendant<TimerModel>(
+                      builder: (context, _, model) => MaterialButton(
+                            onPressed: () {
+                              model.screenAwake();
+                            },
+                            color: Colors.red,
+                            minWidth: size / 3.2,
+                            child: Text("Work"),
+                          )),
+                  ScopedModelDescendant<TimerModel>(
+                      builder: (context, _, model) => MaterialButton(
+                            onPressed: () {
+                              model.stopTimer();
+                            },
+                            color: Color(0xff689F38),
+                            minWidth: size / 3.2,
+                            child: Text("Stop"),
+                          )),
+                  ScopedModelDescendant<TimerModel>(
+                      builder: (context, _, model) => MaterialButton(
+                            onPressed: () {
+                              model.restartTimer();
+                            },
+                            color: Color(0xff689F38),
+                            minWidth: size / 3.2,
+                            child: Text("Restart"),
+                          )),
+                ],
+              ),
+              Expanded(
+                  child: ScopedModelDescendant<TimerModel>(
+                      builder: (context, _, model) => CircularPercentIndicator(
+                            radius: 180.0,
+                            lineWidth: 20.0,
+                            progressColor: Colors.green,
+                            percent: model.radius,
+                            center: Text(
+                              model.time,
+                              style: Theme.of(context).textTheme.subtitle1,
+                            ),
+                          )))
+            ],
           ),
-          ElevatedButton(
-            onPressed: () {},
-            child: Text("Short Break"),
-            style: ElevatedButton.styleFrom(
-                padding: EdgeInsets.symmetric(horizontal: 40, vertical: 10),
-                primary: Colors.green),
-          ),
-          ElevatedButton(
-            onPressed: () {},
-            child: Text("Long Break"),
-            style: ElevatedButton.styleFrom(
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                primary: Colors.green.shade700),
-          ),
-        ],
+        ),
       ),
     );
   }
