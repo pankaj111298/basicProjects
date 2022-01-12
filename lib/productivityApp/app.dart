@@ -19,7 +19,6 @@ class ProductivityApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Productivity Timer',
         debugShowCheckedModeBanner: false,
-        theme: ThemeData(bottomAppBarColor: Colors.red),
         home: MainPage(
           title: "Productivity Timer",
         ),
@@ -45,6 +44,7 @@ class _MainPageState extends State<MainPage> {
       child: Scaffold(
         appBar: AppBar(
           title: Text(widget.title),
+          backgroundColor: Colors.red,
         ),
         body: Center(
           child: Column(
@@ -57,7 +57,7 @@ class _MainPageState extends State<MainPage> {
                             onPressed: () {
                               model.screenAwake();
                             },
-                            color: Colors.red,
+                            color: Color(0xff689F38),
                             minWidth: size / 3.2,
                             child: Text("Work"),
                           )),
@@ -66,7 +66,7 @@ class _MainPageState extends State<MainPage> {
                             onPressed: () {
                               model.stopTimer();
                             },
-                            color: Color(0xff689F38),
+                            color: Colors.red,
                             minWidth: size / 3.2,
                             child: Text("Stop"),
                           )),
@@ -92,7 +92,30 @@ class _MainPageState extends State<MainPage> {
                               model.time,
                               style: Theme.of(context).textTheme.subtitle1,
                             ),
-                          )))
+                          ))),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  ScopedModelDescendant<TimerModel>(
+                      builder: (context, _, model) => MaterialButton(
+                            onPressed: () {
+                              model.shortBreak();
+                            },
+                            child: Text("Short Break"),
+                            color: Color(0xff689F38),
+                            minWidth: size / 2.1,
+                          )),
+                  ScopedModelDescendant<TimerModel>(
+                      builder: (context, _, model) => MaterialButton(
+                            onPressed: () {
+                              model.longBreak();
+                            },
+                            child: Text("Long Break"),
+                            color: Color(0xff689F38),
+                            minWidth: size / 2.1,
+                          )),
+                ],
+              ),
             ],
           ),
         ),

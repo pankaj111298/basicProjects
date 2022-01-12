@@ -60,9 +60,24 @@ class TimerModel extends Model {
     startTimer(defaultTime);
   }
 
-  void shortBreak() {}
+  void shortBreak() {
+    Screen.keepOn(true);
+    _radius = 1;
+    defaultTime = Duration(minutes: 5, seconds: 0);
+    notifyListeners();
+    fulltime = defaultTime;
+    startTimer(defaultTime);
+  }
 
-  void longBreak() {}
+  void longBreak() {
+    Screen.keepOn(true);
+    _radius = 1;
+    defaultTime = Duration(minutes: 15, seconds: 0);
+    notifyListeners();
+    fulltime = defaultTime;
+    startTimer(defaultTime);
+  }
+
   void startTimer(Duration time) {
     stopTimer();
     timer = Timer.periodic(Duration(seconds: 1), (timer) => decrementTime());
